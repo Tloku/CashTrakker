@@ -1,0 +1,20 @@
+.nav-container {
+    width: 100%;
+    height: 10vh;
+    display: flex;
+    background-color: var(--main-beige-color);
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid black;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+
+    .app-name {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: 1.8em;
+        font-weight: bold;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

@@ -1,0 +1,15 @@
+.expenses-table-container {
+    width: 60%;
+    height: fit-content;
+    min-height: 100px;
+    margin: 20px 10px;
+    box-shadow: -1px 1px 3px 0px black;
+
+    .table {
+        width: 90%;
+        padding: 20px 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
