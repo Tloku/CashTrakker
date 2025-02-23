@@ -1,8 +1,11 @@
 .app-component-container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 0 10px;
+}
+
+router-outlet {
+    display: contents;
 }
