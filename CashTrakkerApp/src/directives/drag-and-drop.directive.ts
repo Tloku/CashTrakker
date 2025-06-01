@@ -14,14 +14,12 @@ export class DragDropDirective {
 
   @HostListener('dragover', ['$event'])
   onDragOver(event: DragEvent) {
-    console.log('dragging')
     event.preventDefault();
     event.stopImmediatePropagation();
   }
 
   @HostListener('dragleave', ['$event'])
   onDragLeave(event: DragEvent) {
-    console.log('leaving')
     event.preventDefault();
     event.stopImmediatePropagation();
   }
@@ -34,12 +32,15 @@ export class DragDropDirective {
 
     if (!event.dataTransfer?.files) return;
 
-    let fileToUpload: FileToUpload = {
-      id: uuidv4(),
-      file: event.dataTransfer.files[0],
-      uploadDate: new Date()
-    }
-    debugger;
-    this._store.dispatch(FileUploadActions.addFileToUpload({file: fileToUpload}))
+    const filesToUpload = Array.from(event.dataTransfer.files)
+      .map((file: File) => {
+        return {
+          id: uuidv4(),
+          file: file,
+          uploadDate: new Date()
+        } as FileToUpload
+      })
+    
+    this._store.dispatch(FileUploadActions.addFilesToUpload({files: filesToUpload}))
   }
 }

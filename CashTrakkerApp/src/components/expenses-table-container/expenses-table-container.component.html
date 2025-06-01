@@ -19,6 +19,9 @@
     </div>
 
     <div *ngFor="let item of fileUploads$ | async">
-        {{ item.file?.name }}
+        {{ item.file.name }}
     </div>
+    <button (click)="attachFiles()">Queue</button>
+    <button (click)="uploadFiles()">Upload</button>
+    <button (click)="popQueuedFile()">Pop</button>
 </div>

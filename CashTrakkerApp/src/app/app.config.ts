@@ -9,6 +9,9 @@ import { provideState, provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideEffects } from '@ngrx/effects';
 import { fileUploadReducer } from '../store/reducers/file-upload.reducer';
+import { queuedFilesReducer } from '../store/reducers/queued-files-upload.reducer';
+import { QueuedFilesUploadEffects } from '../store/effects/queued-files-upload.effects';
+import { ChuncksUploadEffects } from '../store/effects/chunks-upload.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,12 +21,16 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     providePrimeNG({
         theme: {
-            preset: Aura
+          preset: Aura,
+          options: {
+            darkModeSelector: '.cashtrakker-dark'
+          }
         }
     }),
     provideStore(),
     provideState('fileUploads', fileUploadReducer),
+    provideState('queuedFiles', queuedFilesReducer),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
-    provideEffects()
-]
+    provideEffects([QueuedFilesUploadEffects, ChuncksUploadEffects])
+  ]
 };
