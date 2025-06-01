@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: kafkamessengerapplication
+  kafka:
+    bootstrap-servers: localhost:39092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: file-chunk-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+  data:
+    redis:
+      database: 0
+      host: localhost
+      port: 6379
+      password: 12345
+      timeout: 60000
+      client-name: cash-trakker-server
+
+server:
+  port: 8095
+
+nuxeo:
+  url: http://localhost:8091/nuxeo
+  username: Administrator
+  password: Administrator
+
+kafka:
+  file-chunk-topic: cashtrakker-filechunk-topic

@@ -16,6 +16,10 @@ export const fileUploadReducer = createReducer(
     (state, { file }) => fileToUploadAdapter.addOne(file, state)
   ),
   on(
+    FileUploadActions.addFilesToUpload, 
+    (state, { files }) => fileToUploadAdapter.addMany(files, state)
+  ),
+  on(
     FileUploadActions.deleteFileToUpload,
     (state, { id }) => fileToUploadAdapter.removeOne(id, state)
   ),
