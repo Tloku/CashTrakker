@@ -1,20 +1,22 @@
-import { Component } from '@angular/core';
-import { TableModule } from 'primeng/table';
-import { FileToUploadState } from '../../store/reducers/file-upload.reducer';
-import { Store } from '@ngrx/store';
+import {Component, OnInit} from '@angular/core';
+import {TableModule} from 'primeng/table';
+import {FileToUploadState} from '../../store/reducers/file-upload.reducer';
+import {Store} from '@ngrx/store';
 import * as FileUploadSelector from '../../store/selectors/file-upload.selectors';
-import { Observable, take, tap } from 'rxjs';
-import { FileToUpload } from '../../store/models/file-to-upload.model';
-import { CommonModule } from '@angular/common';
-import { FileUploaderService } from '../../services/api/file-uploader.service';
-import { QueuedFileActions } from '../../store/actions/file-upload.actions';
-import { v4 } from 'uuid';
+import {Observable, take, tap} from 'rxjs';
+import {FileToUpload} from '../../store/models/file-to-upload.model';
+import {CommonModule} from '@angular/common';
+import {FileUploaderService} from '../../services/api/file-uploader.service';
+import {QueuedFileActions} from '../../store/actions/file-upload.actions';
+import {CtCommonTableComponent} from '../common/ct-table/ct-common-table.component';
+import {KeyValuePair} from '../common/types/keyValuePair';
 
 @Component({
-  selector: 'app-expenses-table-container',
+  selector: 'ct-expenses-table-container',
   imports: [
     TableModule,
-    CommonModule
+    CommonModule,
+    CtCommonTableComponent
   ],
   providers: [
     FileUploaderService
@@ -22,36 +24,25 @@ import { v4 } from 'uuid';
   templateUrl: './expenses-table-container.component.html',
   styleUrl: './expenses-table-container.component.scss'
 })
-export class ExpensesTableContainerComponent {
+export class ExpensesTableContainerComponent implements OnInit {
 
-    products: any[] = [
-      {id: 1, tit: 'title', some: 'something'},
-      {id: 2, tit: 'title', some: 'something'},
+    filesRowNamesKvp: KeyValuePair[] = [
+      { key: 'Identyfikator', value: "id"},
+      { key: "Nazwa pliku", value: "fileName"},
+      { key: "Data dodania", value: "uploadDate" }
     ]
 
-    fileUploads$: Observable<FileToUpload[]>;
+    tableMinWidth: string = '30rem'
+
+    fileUploads$: Observable<FileToUpload[]> | undefined;
 
     constructor(
       private readonly _store: Store<FileToUploadState>,
       private readonly _fileUploaderService: FileUploaderService
-    
-    ) {
+    ) {}
+
+    ngOnInit(): void {
       this.fileUploads$ = this._store.select(FileUploadSelector.selectAll)
-    }
-
-    attachFiles() {
-      this.fileUploads$
-        .pipe(
-          take(1),
-          tap((filesToUpload: FileToUpload[]) => {
-            this._store.dispatch(QueuedFileActions.queueAll({ filesToUpload }))
-          })
-        )
-        .subscribe()
-    }
-
-    popQueuedFile() {
-      this._store.dispatch(QueuedFileActions.popAndGet())
     }
 
     uploadFiles() {

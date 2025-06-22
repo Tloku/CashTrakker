@@ -1,12 +1,12 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from "@ngrx/entity";
-import { FileToUpload } from "../models/file-to-upload.model";
+import {FileToUpload, QueuedFile} from "../models/file-to-upload.model";
 import { createReducer, on } from "@ngrx/store";
 import * as FileUploadActions from '../actions/file-upload.actions'
 
 
-export const queuedFilesAdapter: EntityAdapter<FileToUpload> = createEntityAdapter<FileToUpload>()
+export const queuedFilesAdapter: EntityAdapter<QueuedFile> = createEntityAdapter<QueuedFile>()
 
-export interface QueuedFilesState extends EntityState<FileToUpload> {}
+export interface QueuedFilesState extends EntityState<QueuedFile> {}
 
 export const initialState: QueuedFilesState = queuedFilesAdapter.getInitialState()
 
@@ -26,6 +26,9 @@ export const queuedFilesReducer = createReducer(
       if (state.ids.length === 0) return state;
       const lastId: string = state.ids[state.ids.length - 1].toString();
       return queuedFilesAdapter.removeOne(lastId, state);
-    }
-  )
+    }),
+    on(
+      FileUploadActions.QueuedFileActions.removeById,
+      (state, { id }) => queuedFilesAdapter.removeOne(id, state)
+    )
 )

@@ -1,5 +1,5 @@
 import { createAction, createActionGroup, emptyProps, props } from '@ngrx/store';
-import { FileChunk, FileToUpload } from '../models/file-to-upload.model';
+import {FileChunk, FileToUpload, QueuedFile} from '../models/file-to-upload.model';
 
 export const addFileToUpload = createAction(
   '[File Upload] Add',
@@ -13,13 +13,14 @@ export const addFilesToUpload = createAction(
 
 export const deleteFileToUpload = createAction('[File Upload] Delete', props<{id: string}>());
 export const clearFilesToUpload = createAction('[File Upload] Clear');
+export const removeNewFile = createAction('[File Upload] Remove', props<{id: string}>());
 
 export const QueuedFileActions = createActionGroup({
   source: "QueuedFile",
   events: {
-    'QueueAll': props<{filesToUpload: FileToUpload[]}>(),
-    'Queue': props<{queuedFile: FileToUpload}>(),
-    'Upload': props<FileToUpload>(),
+    'QueueAll': props<{filesToUpload: QueuedFile[]}>(),
+    'Queue': props<{queuedFile: QueuedFile}>(),
+    'Upload': props<QueuedFile>(),
     'UploadSuccess': emptyProps(),
     'UploadFailure': emptyProps(),
     'ProcessUploading': emptyProps(),
@@ -27,6 +28,7 @@ export const QueuedFileActions = createActionGroup({
     'ProcessUploadingFailure': props<{error: string}>(),
     'Pop': emptyProps(),
     'PopAndGet': emptyProps(),
+    'RemoveById': props<{id: string}>(),
   }
 })
 

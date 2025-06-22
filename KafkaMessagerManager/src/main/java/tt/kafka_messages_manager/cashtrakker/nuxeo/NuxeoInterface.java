@@ -2,6 +2,7 @@ package tt.kafka_messages_manager.cashtrakker.nuxeo;
 
 import org.nuxeo.client.objects.Document;
 import org.nuxeo.client.objects.Documents;
+import tt.kafka_messages_manager.cashtrakker.model.NuxeoFile;
 
 import java.util.List;
 
@@ -15,4 +16,7 @@ public interface NuxeoInterface {
     void saveDocumentAsFile(Document document, String path);
     Document createFileDocument(String workSpacePath, String fileName);
     void uploadFileContentUsingBatch(String path, String fileName, String workspacePath);
+    void uploadFileContentUsingBatch(Document document, NuxeoFile nuxeoFile);
+    Document saveNuxeoFile(NuxeoFile nuxeoFile, String workspacePath);
+    void clearWorkspace(String path);
 }

@@ -6,8 +6,9 @@
     margin: 0;
     padding: 0;
 
-    .expenses-table {
-        width: 100%;
-        height: 100%;
+    .newly-added-files-table,
+    .expenses-table,
+    .queued-files-table {
+        min-width: 100%;
     }
 }

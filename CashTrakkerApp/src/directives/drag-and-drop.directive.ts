@@ -1,16 +1,20 @@
-import { Directive, HostListener } from '@angular/core';
+import {Directive, HostListener, inject} from '@angular/core';
 import { FileToUploadState } from '../store/reducers/file-upload.reducer';
 import { Store } from '@ngrx/store';
 import * as FileUploadActions from '../store/actions/file-upload.actions';
 import { FileToUpload } from '../store/models/file-to-upload.model';
 import { v4 as uuidv4 } from 'uuid';
+import {DatePipe} from '@angular/common';
 
 @Directive({
   selector: '[appDragDrop]'
 })
 export class DragDropDirective {
-  
-  constructor(private _store: Store<FileToUploadState>) { }
+  private datePipe = inject(DatePipe);
+
+  constructor(
+    private readonly store: Store<FileToUploadState>
+  ) { }
 
   @HostListener('dragover', ['$event'])
   onDragOver(event: DragEvent) {
@@ -37,10 +41,10 @@ export class DragDropDirective {
         return {
           id: uuidv4(),
           file: file,
-          uploadDate: new Date()
+          uploadDate: this.datePipe.transform(new Date(), 'dd-MM-yyyy HH:mm')
         } as FileToUpload
       })
-    
-    this._store.dispatch(FileUploadActions.addFilesToUpload({files: filesToUpload}))
+
+    this.store.dispatch(FileUploadActions.addFilesToUpload({files: filesToUpload}))
   }
 }

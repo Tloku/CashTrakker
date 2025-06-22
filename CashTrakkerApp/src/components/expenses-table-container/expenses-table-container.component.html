@@ -1,27 +1,10 @@
 <div class="expenses-table-container">
-    <div class="table">
-        <p-table [value]="products" [tableStyle]="{ 'min-width': '30rem' }">
-            <ng-template #header>
-                <tr>
-                    <th>Code</th>
-                    <th>Name</th>
-                    <th>Category</th>
-                </tr>
-            </ng-template>
-            <ng-template #body let-product>
-                <tr>
-                    <td>{{ product.id }}</td>
-                    <td>{{ product.tit }}</td>
-                    <td>{{ product.some }}</td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </div>
-
-    <div *ngFor="let item of fileUploads$ | async">
-        {{ item.file.name }}
-    </div>
-    <button (click)="attachFiles()">Queue</button>
-    <button (click)="uploadFiles()">Upload</button>
-    <button (click)="popQueuedFile()">Pop</button>
+  <div class="common-table">
+    <ct-common-table
+      *ngIf="fileUploads$"
+      [value]="fileUploads$ | async"
+      [headerRowNames]="filesRowNamesKvp"
+      [minTableWidth]="tableMinWidth"
+    ></ct-common-table>
+  </div>
 </div>

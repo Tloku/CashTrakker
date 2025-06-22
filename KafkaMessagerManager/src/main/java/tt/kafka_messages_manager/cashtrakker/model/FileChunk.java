@@ -11,7 +11,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@RedisHash(timeToLive = 60L * 10)
 public class FileChunk implements Serializable {
     private static final long serialVersionUID = 1L;
     private String id;

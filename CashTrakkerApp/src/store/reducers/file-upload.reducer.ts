@@ -12,11 +12,11 @@ export const initialState: FileToUploadState = fileToUploadAdapter.getInitialSta
 export const fileUploadReducer = createReducer(
   initialState,
   on(
-    FileUploadActions.addFileToUpload, 
+    FileUploadActions.addFileToUpload,
     (state, { file }) => fileToUploadAdapter.addOne(file, state)
   ),
   on(
-    FileUploadActions.addFilesToUpload, 
+    FileUploadActions.addFilesToUpload,
     (state, { files }) => fileToUploadAdapter.addMany(files, state)
   ),
   on(
@@ -26,5 +26,9 @@ export const fileUploadReducer = createReducer(
   on(
     FileUploadActions.clearFilesToUpload,
     (state) => fileToUploadAdapter.removeAll(state)
+  ),
+  on(
+    FileUploadActions.removeNewFile,
+    (state, { id }) => fileToUploadAdapter.removeOne(id, state)
   )
 )

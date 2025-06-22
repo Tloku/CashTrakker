@@ -23,14 +23,15 @@ public class FileUploadService {
         String key = fileChunk.getId() + "-" + fileChunk.getChunkNumber();
         fileChunkRepository.save(key, fileChunk);
         FileChunkResponse resp = FileChunkResponse.builder()
-                .name(key)
-                .build();
-
+            .name(key)
+            .build();
+        System.out.println("Saved chunk number: " + fileChunk.getChunkNumber() + " of id: " + fileChunk.getId());
         if (fileChunk.isLastChunk()) {
+            System.out.println("Sending message. FileChunk id: " + fileChunk.getId());
             kafkaProducerService.sendMessage("cashtrakker-filechunk-topic", FileChunkMessage.builder()
-                    .id(fileChunk.getId())
-                    .numbersOfChunks(fileChunk.getChunkNumber())
-                    .build());
+                .id(fileChunk.getId())
+                .numbersOfChunks(fileChunk.getChunkNumber())
+                .build());
         }
 
         return resp;

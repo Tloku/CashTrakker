@@ -1,7 +1,7 @@
 import { ApplicationConfig, provideZoneChangeDetection, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { providePrimeNG } from 'primeng/config';
-import Aura from '@primeng/themes/aura';
+import Lara from '@primeng/themes/lara';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient } from '@angular/common/http';
@@ -12,6 +12,7 @@ import { fileUploadReducer } from '../store/reducers/file-upload.reducer';
 import { queuedFilesReducer } from '../store/reducers/queued-files-upload.reducer';
 import { QueuedFilesUploadEffects } from '../store/effects/queued-files-upload.effects';
 import { ChuncksUploadEffects } from '../store/effects/chunks-upload.effects';
+import {customPreset} from '../custom-preset';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,7 +22,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     providePrimeNG({
         theme: {
-          preset: Aura,
+          preset: customPreset,
           options: {
             darkModeSelector: '.cashtrakker-dark'
           }

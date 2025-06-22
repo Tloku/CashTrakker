@@ -1,0 +1,20 @@
+<div class="newly-added-files-table-container">
+  <div class="component-header">
+    <h3 class="title">Nowe pliki</h3>
+    <button
+      pButton
+      pButtonLabel
+      (click)="attachFiles()"
+    >Załącz pliki</button>
+  </div>
+  <div class="common-table">
+    <ct-common-table
+      *ngIf="newFiles$"
+      [value]="newFiles$ | async"
+      [headerRowNames]="filesRowNamesKvp"
+      [minTableWidth]="tableMinWidth"
+      [displayRemoveColumn]="true"
+      (removeElementMethod)="removeNewFileElement($event)"
+    ></ct-common-table>
+  </div>
+</div>

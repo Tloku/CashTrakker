@@ -16,36 +16,36 @@ export class QueuedFilesUploadEffects {
   private _store = inject(Store);
   private _processFileService = inject(ProcessFileUploadsService)
 
-  processUploading$ = createEffect(() => 
+  processUploading$ = createEffect(() =>
     this._actions$.pipe(
       ofType(this.QueuedFileActions.processUploading),
       withLatestFrom(this._store.select(QueuedfilesSelector.selectAll)),
       map(([_, files]) => {
-        files.forEach(file => 
+        files.forEach(file =>
           this._store.dispatch(this.QueuedFileActions.upload(file))
-        ) 
+        )
 
         return this.QueuedFileActions.processUploadingSuccess()
       }))
     )
 
-  upload$ = createEffect(() => 
+  upload$ = createEffect(() =>
     this._actions$.pipe(
       ofType(this.QueuedFileActions.upload),
       map(action => this._processFileService.divideFileInChunks(action)),
       tap((fileChunks: FileChunk[]) => this._store.dispatch(this.FileChunkActions.addChunks({chunks: fileChunks}))),
       map((fileChunks: FileChunk[]) => {
         this._store.dispatch(this.FileChunkActions.addChunks({chunks: fileChunks}))
-        fileChunks.forEach((chunk: FileChunk) => 
-          this._store.dispatch(this.FileChunkActions.uploadChunk(chunk))
-        )
+        for (let fileChunk of fileChunks) {
+          this._store.dispatch(this.FileChunkActions.uploadChunk(fileChunk))
+        }
       }
       ),
       map(() => this.QueuedFileActions.uploadSuccess())
     )
   )
 
-  pop$ = createEffect(() => 
+  pop$ = createEffect(() =>
     this._actions$.pipe(
       ofType(this.QueuedFileActions.popAndGet),
       withLatestFrom(this._store.select(QueuedfilesSelector.selectLastQueuedFile)),

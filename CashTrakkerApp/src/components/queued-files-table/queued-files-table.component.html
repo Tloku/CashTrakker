@@ -1,0 +1,65 @@
+<div class="queued-files-table-container">
+  <div class="component-header">
+    <h3 class="title">Pliki do wysłania</h3>
+    <button
+      class="upload-files-button"
+      pButton
+      pButtonLabel
+      (click)="uploadFiles()"
+    >Wyślij pliki</button>
+  </div>
+  <div class="common-table">
+    <ng-container *ngTemplateOutlet="queuedFiles"></ng-container>
+  </div>
+</div>
+
+<ng-template #queuedFiles>
+  <div class="table" *ngIf="queuedFiles$ | async as queuedFiles">
+    <p-table
+      [value]="queuedFiles"
+      showGridlines
+      stripedRows
+      [tableStyle]="{
+     'width': '100%',
+     'min-width': tableMinWidth
+     }">
+      <ng-template #header>
+        <tr>
+          <th *ngFor="let name of filesRowNamesKvp">
+            {{ name.key }}
+          </th>
+          <th *ngIf="queuedFiles.length">
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-item>
+        <tr>
+          <td *ngFor="let name of filesRowNamesKvp">
+            {{ item[name.value] }}
+          </td>
+          <td class="removeButton">
+            <button
+              pButton
+              icon="pi pi-times"
+              (click)="removeQueuedFile(item['id'])"
+              severity="danger"></button>
+          </td>
+        </tr>
+        <tr
+          *ngIf="item['isBeingUploaded']"
+          class="progressbar-styling"
+        >
+          <td [attr.colspan]="filesRowNamesKvp?.length ? filesRowNamesKvp.length + 1 : undefined">
+            <p-progressbar [value]="10"></p-progressbar>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+          <td [attr.colspan]="filesRowNamesKvp?.length">Brak danych do wyświetlenia</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</ng-template>

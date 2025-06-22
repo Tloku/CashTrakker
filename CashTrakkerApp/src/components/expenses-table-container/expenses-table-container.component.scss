@@ -1,14 +1,29 @@
 .expenses-table-container {
-    width: 60%;
+    width: 80%;
     height: fit-content;
     min-height: 100px;
-    margin: 0 10px;
-    box-shadow: -1px 1px 3px 0px black;
+    margin: 10px;
+    box-shadow: 0 0 15px -5px black;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: 15px;
 
-    .table {
-        width: 90%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    .common-table {
+      padding: 10px;
+    }
+
+    button {
+      width: 80px;
+      height: 30px;
+    }
+
+    .buttons {
+      margin-top: 30px;
+      margin-bottom: 30px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: 10px;
     }
 }

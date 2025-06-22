@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import "primeicons/primeicons.css";
 
 :root {
     --main-pink-color: #D496A7;
@@ -6,6 +7,14 @@
     --main-blue-color: #0A2463;
     --main-green-color: #2D848A;
     --main-beige-color: #FFD29D;
+    --lighter-blue-color: #1650ff;
+      //--p-button-primary-color: var(--main-beige-color) !important;
+      //--p-button-primary-background: var(--lighter-blue-color) !important;
+      //--p-button-primary-hover-background: var(--lighter-blue-color) !important;
+      //--p-button-primary-border-color: var(--lighter-blue-color) !important;
+      //--p-button-primary-hover-border-color: var(--lighter-blue-color) !important;
+    --p-progressbar-height: 0.75rem !important;
+    --p-progressbar-label-font-size: 0.7rem !important;
 }
 
 body {

@@ -29,12 +29,12 @@ class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, FileChunk> redisFileTemplate(
+    public RedisTemplate<String, Object> redisFileTemplate(
             RedisConnectionFactory connectionFactory,
             ObjectMapper objectMapper
     ) {
         System.out.println(connectionFactory);
-        var template = new RedisTemplate<String, FileChunk>();
+        var template = new RedisTemplate<String, Object>();
         template.setConnectionFactory(connectionFactory);
         template.setKeySerializer(new StringRedisSerializer());
         template.setHashKeySerializer(new StringRedisSerializer());

@@ -9,12 +9,14 @@ import org.nuxeo.client.objects.upload.BatchUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import tt.kafka_messages_manager.cashtrakker.model.NuxeoFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -97,8 +99,14 @@ public class NuxeoService implements NuxeoInterface {
         Map<String, String> properties = document.getPropertyValue("file:content");
         String title = properties.get("name");
         try (InputStream blobStream = document.streamBlob().getStream()) {
-            Files.copy(blobStream, Path.of(path + title));
-            System.out.println("File saved successfully!");
+            Path targetDir = Path.of(path);
+            if (!Files.exists(targetDir)) {
+                Files.createDirectories(targetDir);
+            }
+
+            Path targetFile = targetDir.resolve(title);
+            Files.copy(blobStream, targetFile, StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("File saved successfully at: " + targetFile);
         } catch (IOException e) {
             throw new RuntimeException("Failed to save file", e);
         }
@@ -107,8 +115,10 @@ public class NuxeoService implements NuxeoInterface {
     @Override
     public Document createFileDocument(String workSpacePath, String fileName) {
         Document document = Document.createWithName(fileName, NuxeoDocumentType.FILE.getType());
-        document.setPropertyValue("dc:title", fileName.split("\\.")[0]);
-        return nuxeoClient.repository().createDocumentByPath(workSpacePath, document);
+        document.setPropertyValue("dc:title", fileName);
+        Document created = nuxeoClient.repository().createDocumentByPath(workSpacePath, document);
+        System.out.println("Created document of title: " + fileName);
+        return created;
     }
 
     @Override
@@ -120,6 +130,36 @@ public class NuxeoService implements NuxeoInterface {
         batchUpload.operationOnFile(Operations.BLOB_ATTACH_ON_DOCUMENT)
                 .param("document", workspacePath + "/" + fileName)
                 .execute();
+    }
+
+    @Override
+    public void uploadFileContentUsingBatch(Document document, NuxeoFile nuxeoFile) {
+        BatchUpload batchUpload = nuxeoClient.batchUploadManager().createBatch();
+        batchUpload = batchUpload.upload("0", nuxeoFile.getBlob());
+        batchUpload.operationOnFile(Operations.BLOB_ATTACH_ON_DOCUMENT)
+                .param("document", document.getPath())
+                .execute();
+        System.out.println("Executed file batch uploading");
+    }
+
+    @Override
+    public Document saveNuxeoFile(NuxeoFile nuxeoFile, String workspacePath) {
+        Document created = createFileDocument(workspacePath, nuxeoFile.getId());
+        uploadFileContentUsingBatch(created, nuxeoFile);
+        return created;
+    }
+
+    @Override
+    public void clearWorkspace(String path) {
+        String query = "SELECT * FROM Document WHERE ecm:path STARTSWITH '" + path + "' AND ecm:primaryType = 'File' AND ecm:isTrashed = 0";
+        List<Document> documents = nuxeoClient.repository().query(query).getDocuments();
+
+        for (Document doc : documents) {
+            System.out.println("Deleting document: " + doc.getTitle() + " (" + doc.getPath() + ")");
+            nuxeoClient.repository().deleteDocument(doc.getId());
+        }
+
+        System.out.println("Workspace cleared: " + path);
     }
 
     private Stream<Document> getAllDocumentsRecursively(Document rootDocument) {

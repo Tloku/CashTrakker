@@ -1,0 +1,52 @@
+.queued-files-table-container {
+  width: 80%;
+  height: fit-content;
+  min-height: 100px;
+  margin: 10px;
+  box-shadow: 0 0 15px -5px black;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 15px;
+  padding: 10px 20px;
+
+  .common-table {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .component-header {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    height: 50px;
+    width: 100%;
+
+    :first-child {
+      font-size: 1.05em;
+    }
+
+    :nth-child(2) {
+      margin-left: auto;
+    }
+  }
+
+  .upload-files-button {
+    width: 120px !important;
+    height: 30px !important;
+    font-size: 14px;
+  }
+
+  .progressbar-styling {
+    height: 8px;
+
+    > td {
+      padding: 0 !important;
+    }
+  }
+
+  .removeButton {
+    display: flex;
+    justify-content: center;
+  }
+}
